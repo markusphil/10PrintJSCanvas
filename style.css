@@ -1,0 +1,10 @@
+.background {
+  min-height: 100vh;
+}
+
+.headline {
+  transition: all 1s ease;
+}
+.headline:hover {
+  transform: translateX(100px);
+}
