@@ -55,13 +55,15 @@ class tenPrintCol {
   }
 
   animate() {
-    this.tpCan.drawLine(
-      this.points[this.frame - 1].x,
-      this.points[this.frame - 1].y,
-      this.points[this.frame].x,
-      this.points[this.frame].y,
-      this.points[this.frame - 1].isBreak
-    );
+    if (this.frame < this.points.length) {
+      this.tpCan.drawLine(
+        this.points[this.frame - 1].x,
+        this.points[this.frame - 1].y,
+        this.points[this.frame].x,
+        this.points[this.frame].y,
+        this.points[this.frame - 1].isBreak
+      );
+    }
     this.frame++;
     if (this.frame < this.points.length) {
       window.requestAnimationFrame(this.animate.bind(this));
@@ -78,9 +80,9 @@ class tenPrintCanvas {
   canvas;
   ctx;
   cols = [];
-  strokeWidth = 1;
+  strokeWidth = 2;
 
-  constructor(spacing = 40, chance = 0.5) {
+  constructor(spacing = 20, chance = 0.5) {
     this.spacing = spacing;
     this.chance = chance;
   }
@@ -89,6 +91,7 @@ class tenPrintCanvas {
     this.canvas = document.getElementById(id);
     this.ctx = this.canvas.getContext("2d");
     this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
     this.createCols();
   }
 
@@ -112,14 +115,16 @@ class tenPrintCanvas {
   }
 
   clearCanvas() {
-    // TODO: stop all ongoing animations!
+    // set active frame to Infintiy to stop all ongoing animations.
+    this.cols.forEach(col => (col.frame = Infinity));
+    // draw a clear Rect to get a fresh canvas.
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.cols = [];
   }
 
   handleResize() {
-    console.log("resize");
     this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
     this.clearCanvas();
     this.createCols();
   }
